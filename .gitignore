@@ -7,15 +7,10 @@
 /server/config/secrets/prod/prod.decrypt.private.php
 /server/public/bundles/
 /server/var/
-/vendor/
+/server/vendor/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
-/phpunit.xml
+/server/phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
-
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
