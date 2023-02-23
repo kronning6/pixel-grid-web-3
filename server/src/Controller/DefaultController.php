@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class Controller extends AbstractController
+class DefaultController extends AbstractController
 {
     #[Route('/')]
     #[Route('/health')]
