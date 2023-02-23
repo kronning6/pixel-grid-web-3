@@ -18,11 +18,8 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private ?int $role_id = null;
-
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn("role_id", "role_id")]
+    #[ORM\JoinColumn(name: "role_id", referencedColumnName: "role_id")]
     private ?Role $role = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -50,18 +47,6 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getRoleId(): ?int
-    {
-        return $this->role_id;
-    }
-
-    public function setRoleId(int $role_id): self
-    {
-        $this->role_id = $role_id;
 
         return $this;
     }
