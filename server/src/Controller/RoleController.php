@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
-use App\Service\RoleService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Serialization\SerializationService;
+use App\Service\RoleService;
 
 class RoleController extends ApiController
 {
     private RoleService $roleService;
 
-    public function __construct(RoleService $roleService)
-    {
+    public function __construct(
+        SerializationService $serializationService,
+        RoleService $roleService
+    ) {
+        parent::__construct($serializationService);
         $this->roleService = $roleService;
     }
 

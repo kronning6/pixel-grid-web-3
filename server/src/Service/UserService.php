@@ -2,10 +2,14 @@
 
 namespace App\Service;
 
+use App\DataTransferObject\Incoming\CreateUserDto;
+use App\DataTransferObject\Outgoing\RoleDto;
+use App\DataTransferObject\Outgoing\UserDto;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserService
 {
@@ -21,20 +25,19 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function createUser(Request $request): ?User
+    public function createUser(CreateUserDto $dto): ?UserDto
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $role = $this->roleService->getRole((int) $data['roleId']);
+        $role = $this->roleService->getRole($dto->getRoleId());
         if (!$role) {
-            return null;
+            throw new BadRequestHttpException('Role not found');
         }
         $user = new User();
-        $user->setEmail($data['email']);
+        $user->setEmail($dto->getEmail());
         $user->setRole($role);
-        $user->setFirstName($data['firstName']);
-        $user->setLastName($data['lastName']);
+        $user->setFirstName($dto->getFirstName());
+        $user->setLastName($dto->getLastName());
         $this->userRepository->save($user, true);
-        return $user;
+        return $this->transformToDto($user);
     }
 
     /**
@@ -91,5 +94,17 @@ class UserService
         }
         $this->userRepository->remove($user, true);
         return true;
+    }
+
+    public function transformToDto(User $user): UserDto {
+        return new UserDto(
+            $user->getId(),
+            $this->roleService->transformToDto($user->getRole()),
+            $user->getEmail(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getFgColor(),
+            $user->getBgColor()
+        );
     }
 }

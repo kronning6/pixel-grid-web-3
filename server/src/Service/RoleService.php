@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DataTransferObject\Outgoing\RoleDto;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\RoleRepository;
@@ -60,5 +61,9 @@ class RoleService
         }
         $this->roleRepository->remove($role, true);
         return true;
+    }
+
+    public function transformToDto(Role $role): RoleDto {
+        return new RoleDto($role->getId(), $role->getName());
     }
 }

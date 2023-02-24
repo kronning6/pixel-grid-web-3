@@ -2,13 +2,28 @@
 
 namespace App\Controller;
 
-use Psr\Log\LoggerInterface;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Serialization\SerializationService;
+use App\Exception\InvalidRequestDataException;
 
-class ApiController extends AbstractController
+abstract class ApiController extends AbstractController
 {
     protected const BASE_URL = '/api';
+
+    private SerializationService $serializationService;
+
+    public function __construct(SerializationService $serializationService) {
+        $this->serializationService = $serializationService;
+    }
+
+    /**
+     * @throws InvalidRequestDataException
+     * @throws JsonException
+     */
+    protected function getValidatedDto(Request $request, string $class): object
+    {
+        return $this->serializationService->getValidatedDto($request, $class);
+    }
 }
